@@ -124,7 +124,7 @@ async function crawlPage(url, options = {}) {
     });
 
     // 等一下讓 JS 跑完
-    await page.waitForTimeout(2000);
+    await new Promise(r => setTimeout(r, 2000));
 
     // 提取頁面資訊
     const result = await page.evaluate(() => {
@@ -202,7 +202,7 @@ async function crawlPage(url, options = {}) {
       await page.setUserAgent(mobileUA);
       await page.setViewport({ width: 375, height: 812 });
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout });
-      await page.waitForTimeout(2000);
+      await new Promise(r => setTimeout(r, 2000));
 
       mobileResult = await page.evaluate(() => ({
         title: document.title || '',
@@ -384,7 +384,7 @@ app.post('/screenshot', authCheck, async (req, res) => {
       waitUntil: 'networkidle2',
       timeout: 20000,
     });
-    await page.waitForTimeout(1000);
+    await new Promise(r => setTimeout(r, 1000));
     const buf = await page.screenshot({ type: 'jpeg', quality: 70, fullPage: false });
     await page.close();
 
