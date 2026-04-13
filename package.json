@@ -1,0 +1,14 @@
+{
+  "name": "trustint-crawler",
+  "version": "1.0.0",
+  "description": "TrustInt Crawler Microservice - Puppeteer headless browser for page analysis",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "puppeteer": "^22.0.0",
+    "cors": "^2.8.5"
+  }
+}
