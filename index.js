@@ -831,6 +831,29 @@ function analyzeP0(crawlResult) {
     });
   }
 
+  // v3.1：頁面語言偵測（.com 域名+中文頁面不一致偵測）
+  const bodyText = crawlResult.bodyText || '';
+  const chineseChars = (bodyText.match(/[\u4e00-\u9fff]/g) || []).length;
+  const totalChars = bodyText.replace(/\s/g, '').length || 1;
+  const chineseRatio = chineseChars / totalChars;
+  // 域名全英文判斷（不含 .tw 等本地 TLD）
+  const domainStr = (crawlResult.url || '').replace(/^https?:\/\//, '').split('/')[0];
+  const isEnglishDomain = /^[a-z0-9.-]+\.(com|net|org|io|co)$/i.test(domainStr) && !/\.tw$/i.test(domainStr);
+  const languageInfo = {
+    chineseRatio: parseFloat(chineseRatio.toFixed(2)),
+    isEnglishDomain,
+    isMismatch: isEnglishDomain && chineseRatio > 0.6,
+  };
+  if (languageInfo.isMismatch) {
+    triggered.push({
+      code: 'P0-LANG-MISMATCH',
+      category: 'language_mismatch',
+      hits: 1,
+      confidence: 0.55,
+      details: languageInfo,
+    });
+  }
+
   return {
     triggered: triggered.length > 0,
     rules: triggered,
@@ -858,6 +881,7 @@ function analyzeP0(crawlResult) {
     antiAnalysis: crawlResult.antiAnalysis || {},
     sideloadLinks: crawlResult.sideloadLinks || {},
     seedPhraseRequest: crawlResult.seedPhraseRequest || {},
+    languageInfo,
   };
 }
 
