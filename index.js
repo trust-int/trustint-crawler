@@ -70,6 +70,14 @@ const P0_KEYWORDS = {
   prize_scam: [
     '恭喜中獎', '您已獲得', '免費領取', '限時領取', '點擊領取', '立即領取',
     '禮品卡', 'congratulations', 'you have won', 'claim your prize',
+    // v3.0：假 Google/Apple 中獎
+    '隨機選中', '被選中', '幸運用戶', '幸運訪客', '第.*位訪客',
+    'randomly selected', 'lucky visitor', 'lucky winner', 'selected winner',
+    '贏得 iphone', '贏得iphone', 'win a iphone', 'win an iphone',
+    '贏得 samsung', 'win a samsung', 'win a macbook',
+    'google reward', 'google prize', 'apple reward',
+    '問卷調查.*獎', '填問卷.*獎品', '答題.*獎', 'survey.*reward',
+    '獨家優惠', '專屬獎勵', '會員獎勵',
   ],
   romance_scam: [
     '約炮', '一夜情', '私密', '裸聊', '加我', '加賴', '加line', '私聊', '寂寞',
@@ -82,12 +90,91 @@ const P0_KEYWORDS = {
     '貨到付款', '限時特價', '售完為止', '免運費', '超低價', '清倉', '下殺', '秒殺',
     '全場', '折扣', '特惠', '搶購',
   ],
+  // v3.0 新增：假客服/假技術支援
+  fake_support: [
+    '您的電腦已感染', '您的裝置已被入侵', '立即撥打', '技術支援',
+    'your computer has been compromised', 'call microsoft', 'virus alert',
+    'trojan detected', '木馬', '已被鎖定', '已被加密',
+  ],
+  // v3.0 新增：殺豬盤特徵
+  pig_butchering: [
+    '老師帶單', '分析師', '內部消息', '穩定獲利', '群組', '飆股',
+    '加入我們', '跟著操作', '百分百', '翻倍賺',
+  ],
+  // v3.0 新增：不知名投資平台
+  fake_investment_platform: [
+    '開戶即送', '註冊獎金', '首存優惠', '入金獎勵', '模擬交易',
+    '槓桿', '合約交易', 'leverage', 'margin', '期權',
+    '實盤', '實名認證.*入金', 'kyc.*deposit', '充值',
+    '最低入金', 'minimum deposit', '出金手續費', '提現手續費',
+  ],
+  // v3.0 新增：假虛擬貨幣交易所
+  fake_crypto_exchange: [
+    'usdt', '泰達幣', '比特幣', '以太幣', 'bitcoin', 'ethereum',
+    '幣幣交易', '法幣交易', 'spot trading', 'futures trading',
+    '錢包地址', 'wallet address', '提幣地址', '充幣',
+    '挖礦收益', 'mining reward', 'staking reward', '質押',
+    'defi', 'airdrop', '空投獎勵', 'liquidity mining',
+  ],
+  // v3.0 新增：感情詐騙平台（交友/聊天/禮包）
+  romance_platform: [
+    '聊天室', '私聊', '私訊', '視訊聊天', '語音聊天',
+    '禮物', '禮包', '鑽石', '金幣', '虛擬禮物', '送禮',
+    '充值.*鑽石', '購買.*禮包', '儲值.*金幣',
+    '配對', '附近的人', '交友', '約會', 'match', 'dating',
+    '會員升級', 'vip', '高級會員', 'premium member',
+    '解鎖', '查看照片', '解鎖聊天', '開通',
+  ],
+  // v3.0：二次詐騙（Recovery Scam）— 騙已經被騙過的人
+  recovery_scam: [
+    '資金追回', '追回損失', '駭客團隊', '專業追款', '凍結資金', '解凍金',
+    '保證金', '手續費.*追回', '法務部授權', '金管會授權',
+    'fund recovery', 'get your money back', 'recovery expert',
+    '資金找回', '協助追回', '退款保證',
+  ],
+  // v3.0：側載惡意軟體（APK/EXE 下載陷阱）
+  sideloading: [
+    '下載 app', '立即下載', '安裝 app', '點擊安裝',
+    'download app', 'install now', 'click to install',
+    '企業版描述檔', '信任此開發者', 'trust this developer',
+  ],
+  // v3.0：帳戶凍結恐嚇
+  account_freeze: [
+    '帳戶異常', '帳號被鎖', '帳戶凍結', '帳號停用', '限期處理',
+    '否則永久', '逾期將', '未驗證將',
+    'account locked', 'account suspended', 'verify immediately',
+    'will be terminated', 'permanently disabled',
+  ],
 };
 
 const SENSITIVE_FORM_FIELDS = [
   'password', 'credit', 'card', 'cvv', 'ssn', 'bank', 'account',
   'routing', '密碼', '信用卡', '銀行', '身份證', '帳號', 'otp', 'pin',
 ];
+
+// v3.0：付款頁面偵測關鍵字（非白名單站有這些 = 高度警戒）
+const PAYMENT_INDICATORS = {
+  // 付款表單欄位
+  form_fields: [
+    'card-number', 'cardnumber', 'cc-number', 'credit-card',
+    'card-holder', 'cardholder', 'card-name',
+    'expiry', 'exp-date', 'exp-month', 'exp-year',
+    'cvv', 'cvc', 'security-code', 'card-code',
+    '卡號', '持卡人', '有效期', '安全碼',
+  ],
+  // 付款相關文字
+  page_text: [
+    '信用卡付款', '線上付款', '立即付款', '確認付款', '提交訂單',
+    'pay now', 'submit payment', 'credit card payment', 'checkout',
+    'billing address', '帳單地址', '付款資訊', 'payment info',
+    '訂單金額', 'order total', 'amount due',
+  ],
+  // 第三方支付（合法的）
+  legit_payment: [
+    'stripe.com', 'paypal.com', 'ecpay.com.tw', 'newebpay.com',
+    'tappaysdk', 'tappay', 'braintree', 'square',
+  ],
+};
 
 // ══════════════════════════════════════
 // 爬蟲核心
@@ -177,6 +264,156 @@ async function crawlPage(url, options = {}) {
       const floatingBtns = document.querySelectorAll('[style*="position: fixed"], [style*="position:fixed"], .floating, .chat-widget, [class*="float"]');
       const hasFloatingWidget = floatingBtns.length > 0;
 
+      // ── v3.0 新增偵測 ──
+
+      // 法律條款檢查：有沒有 privacy policy / terms 頁面
+      const allLinks = [...document.querySelectorAll('a')].map(a => ({
+        href: (a.href || '').toLowerCase(),
+        text: (a.textContent || '').toLowerCase(),
+      }));
+      const hasPrivacyPage = allLinks.some(a =>
+        a.href.includes('privacy') || a.href.includes('隱私') ||
+        a.text.includes('隱私') || a.text.includes('privacy'));
+      const hasTermsPage = allLinks.some(a =>
+        a.href.includes('terms') || a.href.includes('tos') ||
+        a.href.includes('條款') || a.href.includes('服務條款') ||
+        a.text.includes('條款') || a.text.includes('terms'));
+      const hasAboutPage = allLinks.some(a =>
+        a.href.includes('about') || a.href.includes('關於') ||
+        a.text.includes('關於我們') || a.text.includes('about'));
+      const hasContactPage = allLinks.some(a =>
+        a.href.includes('contact') || a.href.includes('聯絡') ||
+        a.text.includes('聯絡') || a.text.includes('contact'));
+
+      // 頁面品質分析
+      const cssLinks = document.querySelectorAll('link[rel="stylesheet"]').length;
+      const inlineStyles = document.querySelectorAll('[style]').length;
+      const hasViewport = !!document.querySelector('meta[name="viewport"]');
+      const hasFavicon = !!document.querySelector('link[rel="icon"], link[rel="shortcut icon"]');
+      const scriptCount = document.querySelectorAll('script').length;
+      const brokenImages = [...document.querySelectorAll('img')].filter(img => !img.complete || img.naturalWidth === 0).length;
+
+      // 彈窗/下載偵測
+      const bodyLower = bodyText.toLowerCase();
+      const hasDownloadPrompt = bodyLower.includes('下載') && (bodyLower.includes('病毒') || bodyLower.includes('中毒') || bodyLower.includes('感染'));
+      const hasFakeAlert = bodyLower.includes('您的裝置') || bodyLower.includes('您的手機') || bodyLower.includes('your device') || bodyLower.includes('virus detected');
+      const hasUrgency = bodyLower.includes('立即') && (bodyLower.includes('處理') || bodyLower.includes('更新') || bodyLower.includes('驗證'));
+
+      // HTTPS 檢查
+      const isHttps = window.location.protocol === 'https:';
+
+      // 頁面語言混亂（中文站夾雜大量簡體或亂碼）
+      const hasSimplifiedChinese = /[\u4e00-\u9fff]/.test(bodyText) && (bodyText.includes('确认') || bodyText.includes('开户') || bodyText.includes('银行'));
+      
+      // 重複內容偵測（同一段文字出現多次 = 低品質）
+      const paragraphs = bodyText.split('\n').filter(p => p.trim().length > 20);
+      const uniqueParagraphs = new Set(paragraphs.map(p => p.trim()));
+      const duplicateRatio = paragraphs.length > 0 ? 1 - (uniqueParagraphs.size / paragraphs.length) : 0;
+
+      // ── v3.0：公司資訊偵測 ──
+      const hasCompanyName = /股份有限公司|有限公司|公司|Co\.,?\s*Ltd|Corp|Inc|LLC/i.test(bodyText);
+      const hasPhoneNumber = /(\+?886|0[2-9])\s*-?\s*\d{4}\s*-?\s*\d{4}|\d{2,4}-\d{3,4}-\d{3,4}|客服電話|服務電話|service.*phone|customer.*service/i.test(bodyText);
+      const hasPhysicalAddress = /市.*區.*路|市.*區.*街|縣.*鄉.*路|縣.*鎮.*路|樓|號|\d+\s*(floor|F)|address/i.test(bodyText);
+      const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(bodyText);
+      const hasTaxId = /統一編號|統編|VAT|tax.?id/i.test(bodyText);
+
+      // ── v3.0：敏感資料索取偵測 ──
+      const allInputsDeep = [...document.querySelectorAll('input, select, textarea')].map(el => ({
+        tag: el.tagName.toLowerCase(),
+        type: (el.type || '').toLowerCase(),
+        name: (el.name || '').toLowerCase(),
+        placeholder: (el.placeholder || '').toLowerCase(),
+        label: el.labels?.[0]?.textContent?.toLowerCase() || '',
+        autocomplete: (el.autocomplete || '').toLowerCase(),
+      }));
+      
+      const sensitiveFields = {
+        credit_card: [],
+        id_number: [],
+        otp_code: [],
+        bank_account: [],
+        password: [],
+      };
+
+      for (const inp of allInputsDeep) {
+        const combined = inp.name + ' ' + inp.placeholder + ' ' + inp.label + ' ' + inp.autocomplete;
+        
+        if (/credit|card.?number|卡號|信用卡|visa|mastercard|cc.?num/i.test(combined) ||
+            /cvv|cvc|安全碼|驗證碼.*卡/i.test(combined) ||
+            /exp.*date|有效期|到期/i.test(combined)) {
+          sensitiveFields.credit_card.push(combined.trim().slice(0, 50));
+        }
+        if (/身分證|身份證|id.?number|national.?id|居留證|護照|passport/i.test(combined)) {
+          sensitiveFields.id_number.push(combined.trim().slice(0, 50));
+        }
+        if (/otp|驗證碼|verification.?code|sms.?code|簡訊碼|動態密碼/i.test(combined) && 
+            !/autocomplete/.test(combined)) {
+          sensitiveFields.otp_code.push(combined.trim().slice(0, 50));
+        }
+        if (/bank.?account|帳號|銀行|routing|匯款/i.test(combined) && 
+            !/login|登入|email/.test(combined)) {
+          sensitiveFields.bank_account.push(combined.trim().slice(0, 50));
+        }
+        if (/password|密碼|passcode/i.test(combined) && inp.type !== 'password') {
+          // password type 的 input 是正常的登入，但 text type 要求輸入密碼才可疑
+          sensitiveFields.password.push(combined.trim().slice(0, 50));
+        }
+      }
+
+      const sensitiveFieldCount = Object.values(sensitiveFields).reduce((s, arr) => s + arr.length, 0);
+      const hasSensitiveDataRequest = sensitiveFieldCount >= 2;
+
+      // ── v3.0：付款頁面偵測 ──
+      // 偵測 input 是否有信用卡相關欄位
+      const paymentFormFields = [
+        'card-number', 'cardnumber', 'cc-number', 'credit-card',
+        'card-holder', 'cardholder', 'card-name',
+        'expiry', 'exp-date', 'exp-month', 'exp-year',
+        'cvv', 'cvc', 'security-code', 'card-code',
+        '卡號', '持卡人', '有效期', '安全碼',
+      ];
+      const paymentTextKeywords = [
+        '信用卡付款', '線上付款', '立即付款', '確認付款', '提交訂單',
+        'pay now', 'submit payment', 'credit card payment', 'checkout',
+        '付款資訊', 'payment info', '訂單金額', 'order total',
+        '儲值', '充值', '購買點數', '購買鑽石', '購買金幣',
+        '購買禮包', '加值', 'top up', 'recharge',
+      ];
+
+      let paymentFieldCount = 0;
+      for (const inp of allInputsDeep) {
+        const combined = inp.name + ' ' + inp.placeholder + ' ' + inp.label + ' ' + inp.autocomplete;
+        if (paymentFormFields.some(k => combined.includes(k))) paymentFieldCount++;
+      }
+
+      const paymentTextHits = paymentTextKeywords.filter(k => bodyLower.includes(k)).length;
+
+      // 檢查是否使用合法第三方支付
+      const pageHtml = document.documentElement.outerHTML.toLowerCase();
+      const hasLegitPayment = ['stripe.com', 'paypal.com', 'ecpay.com.tw', 'newebpay.com',
+        'tappaysdk', 'tappay', 'braintree', 'square'].some(p => pageHtml.includes(p));
+
+      const hasPaymentPage = paymentFieldCount >= 2 || paymentTextHits >= 2;
+
+      // ── v3.0：聊天室偵測 ──
+      const chatIndicators = [
+        'chat', 'chatroom', 'message', 'inbox', '聊天', '訊息', '私訊',
+        'websocket', 'socket.io', 'firebase',
+      ];
+      const hasChatFeature = chatIndicators.some(k => pageHtml.includes(k));
+
+      // ── v3.0：虛擬貨幣/投資平台特徵 ──
+      const cryptoIndicators = ['usdt', 'btc', 'eth', 'bitcoin', 'ethereum', '比特幣', '以太幣',
+        '幣幣', '合約交易', 'spot', 'futures', 'k線', 'k-line', 'candlestick',
+        '交易對', 'trading pair', '錢包', 'wallet'];
+      const cryptoHits = cryptoIndicators.filter(k => bodyLower.includes(k)).length;
+      const hasCryptoFeature = cryptoHits >= 3;
+
+      const investmentIndicators = ['開戶', '入金', '出金', '槓桿', 'leverage', '保證金',
+        'margin', '實盤', '模擬盤', '跟單', '帶單', 'roi', '年化', '日報酬'];
+      const investmentHits = investmentIndicators.filter(k => bodyLower.includes(k)).length;
+      const hasInvestmentFeature = investmentHits >= 3;
+
       return {
         title, description, bodyText,
         forms: formData, allInputs,
@@ -185,6 +422,78 @@ async function crawlPage(url, options = {}) {
         totalLinks: links.length,
         externalLinkCount: externalLinks.length,
         hasSocialLure, hasCountdown, hasFloatingWidget,
+        legalPages: { hasPrivacyPage, hasTermsPage, hasAboutPage, hasContactPage },
+        pageQuality: {
+          cssLinks, inlineStyles, hasViewport, hasFavicon,
+          scriptCount, brokenImages, duplicateRatio: +duplicateRatio.toFixed(2),
+        },
+        threats: {
+          hasDownloadPrompt, hasFakeAlert, hasUrgency, isHttps, hasSimplifiedChinese,
+        },
+        companyInfo: {
+          hasCompanyName, hasPhoneNumber, hasPhysicalAddress, hasEmail, hasTaxId,
+        },
+        sensitiveDataRequest: {
+          hasSensitiveDataRequest,
+          totalSensitiveFields: sensitiveFieldCount,
+          fields: sensitiveFields,
+        },
+        // v3.0 付款/平台偵測
+        paymentDetection: {
+          hasPaymentPage,
+          paymentFieldCount,
+          paymentTextHits,
+          hasLegitPayment,
+        },
+        platformDetection: {
+          hasChatFeature,
+          hasCryptoFeature, cryptoHits,
+          hasInvestmentFeature, investmentHits,
+        },
+
+        // ── v3.0 BHR 強因子偵測 ──
+
+        // 孤島網頁偵測：連結有超過 50% 指向 # 或 javascript:void
+        hollowShell: (() => {
+          const allAnchors = [...document.querySelectorAll('a[href]')];
+          if (allAnchors.length < 3) return { isHollow: false, total: allAnchors.length, deadCount: 0 };
+          const deadLinks = allAnchors.filter(a => {
+            const h = a.getAttribute('href') || '';
+            return h === '#' || h === '' || h.startsWith('javascript:') || h === window.location.href || h === window.location.pathname;
+          });
+          const ratio = deadLinks.length / allAnchors.length;
+          return { isHollow: ratio > 0.5, total: allAnchors.length, deadCount: deadLinks.length, ratio: +ratio.toFixed(2) };
+        })(),
+
+        // 右鍵禁用 / 防分析腳本偵測
+        antiAnalysis: (() => {
+          const html = document.documentElement.outerHTML.toLowerCase();
+          const hasDisableRightClick = html.includes('oncontextmenu') && (html.includes('return false') || html.includes('preventdefault'));
+          const hasDisableSelect = html.includes('onselectstart') || html.includes('user-select: none') || html.includes('user-select:none');
+          const hasDebuggerTrap = html.includes('debugger;') || html.includes('setinterval') && html.includes('debugger');
+          const hasDevToolsDetect = html.includes('devtools') || html.includes('firebug');
+          return { hasDisableRightClick, hasDisableSelect, hasDebuggerTrap, hasDevToolsDetect };
+        })(),
+
+        // APK/EXE 下載連結偵測
+        sideloadLinks: (() => {
+          const dangerousExtensions = ['.apk', '.exe', '.msi', '.dmg', '.ipa', '.mobileprovision'];
+          const links = [...document.querySelectorAll('a[href]')].map(a => a.getAttribute('href') || '');
+          const found = links.filter(h => dangerousExtensions.some(ext => h.toLowerCase().endsWith(ext)));
+          return { hasSideload: found.length > 0, count: found.length, urls: found.slice(0, 3) };
+        })(),
+
+        // 私鑰/助記詞索取（直接 L5 kill switch）
+        seedPhraseRequest: (() => {
+          const allInputsCheck = [...document.querySelectorAll('input, textarea')];
+          const combined = allInputsCheck.map(el => 
+            (el.name + ' ' + el.placeholder + ' ' + (el.labels?.[0]?.textContent || '')).toLowerCase()
+          ).join(' ');
+          const hasSeedPhrase = /seed.?phrase|助記詞|mnemonic|private.?key|私鑰|recovery.?phrase|secret.?key/.test(combined);
+          const bodyCheck = bodyLower;
+          const bodyHasSeed = /請輸入.*助記詞|enter.*seed.?phrase|請輸入.*私鑰|enter.*private.?key|12.*words|24.*words/.test(bodyCheck);
+          return { detected: hasSeedPhrase || bodyHasSeed, inForm: hasSeedPhrase, inBody: bodyHasSeed };
+        })(),
       };
     });
 
@@ -215,6 +524,28 @@ async function crawlPage(url, options = {}) {
     const statusCode = response ? response.status() : null;
     const finalUrl = page.url();
 
+    // v3.0：轉址偵測（JS redirect + HTTP redirect）
+    let redirectInfo = null;
+    try {
+      const originalHost = new URL(url).hostname.toLowerCase();
+      const finalHost = new URL(finalUrl).hostname.toLowerCase();
+      if (originalHost !== finalHost) {
+        redirectInfo = {
+          from: originalHost,
+          to: finalHost,
+          crossDomain: true,
+          finalUrl,
+        };
+      } else if (url !== finalUrl) {
+        redirectInfo = {
+          from: url,
+          to: finalUrl,
+          crossDomain: false,
+          finalUrl,
+        };
+      }
+    } catch {}
+
     await page.close();
 
     return {
@@ -223,6 +554,7 @@ async function crawlPage(url, options = {}) {
       ...result,
       screenshot: screenshotBase64,
       mobileResult,
+      redirectInfo,
       duration_ms: duration,
     };
 
@@ -295,12 +627,217 @@ function analyzeP0(crawlResult) {
     }
   }
 
+  // ── v3.0 新增偵測規則 ──
+
+  // 假警告/假病毒偵測
+  const threats = crawlResult.threats || {};
+  if (threats.hasFakeAlert || threats.hasDownloadPrompt) {
+    triggered.push({
+      code: 'P0-FAKE-ALERT',
+      category: 'fake_alert',
+      hits: (threats.hasFakeAlert ? 1 : 0) + (threats.hasDownloadPrompt ? 1 : 0),
+      confidence: 0.80,
+    });
+  }
+
+  // 緊急性話術 + 無法律條款 = 高度可疑
+  const legal = crawlResult.legalPages || {};
+  const noLegalPages = !legal.hasPrivacyPage && !legal.hasTermsPage && !legal.hasAboutPage;
+  if (threats.hasUrgency && noLegalPages) {
+    triggered.push({
+      code: 'P0-URGENCY-NO-LEGAL',
+      category: 'urgency_no_legal',
+      hits: 1,
+      confidence: 0.70,
+    });
+  }
+
+  // 頁面品質極差：文字少 + 圖片多 + 無法律條款 + 無 favicon
+  const quality = crawlResult.pageQuality || {};
+  const textLen = crawlResult.visibleTextLength || 0;
+  const imgCnt = crawlResult.imgCount || 0;
+  if (textLen < 200 && imgCnt > 5 && noLegalPages && !quality.hasFavicon) {
+    triggered.push({
+      code: 'P0-LOW-QUALITY',
+      category: 'low_quality_page',
+      hits: 1,
+      confidence: 0.60,
+    });
+  }
+
+  // 高重複內容（>30%）= 低品質或自動產生
+  if (quality.duplicateRatio > 0.30 && textLen > 500) {
+    triggered.push({
+      code: 'P0-DUPLICATE-CONTENT',
+      category: 'duplicate_content',
+      hits: 1,
+      confidence: 0.55,
+    });
+  }
+
+  // v3.0：跨域轉址偵測（原始域名 ≠ 最終域名 = 可疑）
+  if (crawlResult.redirectInfo && crawlResult.redirectInfo.crossDomain) {
+    triggered.push({
+      code: 'P0-CROSS-DOMAIN-REDIRECT',
+      category: 'cross_domain_redirect',
+      hits: 1,
+      confidence: 0.65,
+      details: crawlResult.redirectInfo,
+    });
+  }
+
+  // v3.0：無公司資訊 + 要求敏感資料 = 高度可疑
+  const company = crawlResult.companyInfo || {};
+  const sensitive = crawlResult.sensitiveDataRequest || {};
+  const noCompanyInfo = !company.hasCompanyName && !company.hasPhoneNumber && !company.hasPhysicalAddress;
+  
+  if (sensitive.hasSensitiveDataRequest && noCompanyInfo) {
+    triggered.push({
+      code: 'P0-SENSITIVE-NO-COMPANY',
+      category: 'sensitive_no_company',
+      hits: sensitive.totalSensitiveFields,
+      confidence: 0.85,
+      details: {
+        fields: sensitive.fields,
+        noCompanyName: !company.hasCompanyName,
+        noPhone: !company.hasPhoneNumber,
+        noAddress: !company.hasPhysicalAddress,
+      },
+    });
+  }
+
+  // 單獨要求敏感資料（即使有公司資訊，3 個以上敏感欄位也要警告）
+  if (sensitive.totalSensitiveFields >= 3) {
+    triggered.push({
+      code: 'P0-EXCESSIVE-SENSITIVE',
+      category: 'excessive_sensitive_fields',
+      hits: sensitive.totalSensitiveFields,
+      confidence: Math.min(0.6 + sensitive.totalSensitiveFields * 0.08, 0.90),
+      details: sensitive.fields,
+    });
+  }
+
+  // 無公司資訊 + 無法律條款 + 非知名站 = 弱訊號累積
+  const legalPages = crawlResult.legalPages || {};
+  const noLegal = !legalPages.hasPrivacyPage && !legalPages.hasTermsPage;
+  if (noCompanyInfo && noLegal && (crawlResult.visibleTextLength || 0) > 100) {
+    triggered.push({
+      code: 'P0-NO-IDENTITY',
+      category: 'no_identity',
+      hits: 1,
+      confidence: 0.50,
+    });
+  }
+
+  // v3.0：非白名單站有付款頁面 + 無合法第三方支付 = 高風險
+  const payment = crawlResult.paymentDetection || {};
+  if (payment.hasPaymentPage && !payment.hasLegitPayment) {
+    triggered.push({
+      code: 'P0-UNSAFE-PAYMENT',
+      category: 'unsafe_payment',
+      hits: payment.paymentFieldCount + payment.paymentTextHits,
+      confidence: 0.80,
+      details: { paymentFields: payment.paymentFieldCount, textHits: payment.paymentTextHits },
+    });
+  }
+
+  // 有付款頁面 + 有合法第三方支付 → 降低但仍然提醒
+  if (payment.hasPaymentPage && payment.hasLegitPayment) {
+    triggered.push({
+      code: 'P0-PAYMENT-DETECTED',
+      category: 'payment_detected',
+      hits: 1,
+      confidence: 0.40, // 低信心，因為有合法支付
+    });
+  }
+
+  // v3.0：不知名虛擬貨幣平台（crypto 特徵多 + 非知名交易所）
+  const platform = crawlResult.platformDetection || {};
+  if (platform.hasCryptoFeature) {
+    triggered.push({
+      code: 'P0-UNKNOWN-CRYPTO',
+      category: 'unknown_crypto_platform',
+      hits: platform.cryptoHits,
+      confidence: Math.min(0.5 + platform.cryptoHits * 0.05, 0.85),
+    });
+  }
+
+  // v3.0：不知名投資平台
+  if (platform.hasInvestmentFeature) {
+    triggered.push({
+      code: 'P0-UNKNOWN-INVESTMENT',
+      category: 'unknown_investment_platform',
+      hits: platform.investmentHits,
+      confidence: Math.min(0.5 + platform.investmentHits * 0.05, 0.85),
+    });
+  }
+
+  // v3.0：聊天室 + 付款 + 無公司資訊 = 感情詐騙平台特徵
+  if (platform.hasChatFeature && payment.hasPaymentPage && noCompanyInfo) {
+    triggered.push({
+      code: 'P0-ROMANCE-PLATFORM',
+      category: 'romance_scam_platform',
+      hits: 3,
+      confidence: 0.85,
+    });
+  }
+
+  // ── v3.0 BHR 強因子 P0 規則 ──
+
+  // BHR-21：孤島網頁（Dead-end Links）— 超過 50% 連結是空的
+  const hollow = crawlResult.hollowShell || {};
+  if (hollow.isHollow && sensitive.hasSensitiveDataRequest) {
+    triggered.push({
+      code: 'P0-HOLLOW-SHELL',
+      category: 'hollow_shell',
+      hits: hollow.deadCount,
+      confidence: 0.85,
+      details: hollow,
+    });
+  }
+
+  // BHR-22：右鍵禁用 + 金融語意 = 心虛的釣魚站
+  const antiA = crawlResult.antiAnalysis || {};
+  if ((antiA.hasDisableRightClick || antiA.hasDebuggerTrap) && 
+      triggered.some(r => ['investment_scam', 'impersonation', 'fake_crypto_exchange', 'pig_butchering'].includes(r.category))) {
+    triggered.push({
+      code: 'P0-ANTI-ANALYSIS',
+      category: 'anti_analysis',
+      hits: 1,
+      confidence: 0.75,
+    });
+  }
+
+  // BHR-23：APK/EXE 下載連結 = 側載惡意軟體
+  const sideload = crawlResult.sideloadLinks || {};
+  if (sideload.hasSideload) {
+    triggered.push({
+      code: 'P0-SIDELOAD',
+      category: 'sideload_malware',
+      hits: sideload.count,
+      confidence: 0.90,
+      details: { urls: sideload.urls },
+    });
+  }
+
+  // BHR-24：私鑰/助記詞索取 = 直接 L5（Kill Switch）
+  const seedPhrase = crawlResult.seedPhraseRequest || {};
+  if (seedPhrase.detected) {
+    triggered.push({
+      code: 'P0-SEED-PHRASE',
+      category: 'seed_phrase_theft',
+      hits: 1,
+      confidence: 0.99,
+    });
+  }
+
   return {
     triggered: triggered.length > 0,
     rules: triggered,
     totalScore: triggered.reduce((s, t) => s + t.hits, 0),
-    recommendedLevel: triggered.length >= 2 ? 5 : (triggered.length === 1 ? 4 : null),
+    recommendedLevel: seedPhrase.detected ? 5 : (triggered.length >= 2 ? 5 : (triggered.length === 1 ? 4 : null)),
     uaDiff,
+    redirectInfo: crawlResult.redirectInfo || null,
     dom: {
       imgCount: crawlResult.imgCount,
       visibleTextLength: crawlResult.visibleTextLength,
@@ -310,6 +847,17 @@ function analyzeP0(crawlResult) {
       hasCountdown: crawlResult.hasCountdown,
       hasFloatingWidget: crawlResult.hasFloatingWidget,
     },
+    legalPages: crawlResult.legalPages || {},
+    pageQuality: crawlResult.pageQuality || {},
+    threats: crawlResult.threats || {},
+    companyInfo: crawlResult.companyInfo || {},
+    sensitiveDataRequest: crawlResult.sensitiveDataRequest || {},
+    paymentDetection: crawlResult.paymentDetection || {},
+    platformDetection: crawlResult.platformDetection || {},
+    hollowShell: crawlResult.hollowShell || {},
+    antiAnalysis: crawlResult.antiAnalysis || {},
+    sideloadLinks: crawlResult.sideloadLinks || {},
+    seedPhraseRequest: crawlResult.seedPhraseRequest || {},
   };
 }
 
